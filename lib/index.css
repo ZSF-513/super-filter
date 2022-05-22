@@ -1,0 +1,116 @@
+.filter-container {
+  width: 100%;
+  border-radius: 4px;
+  background: #ffffff;
+  display: flex;
+  position: relative;
+}
+.filter-container .left {
+  width: 202px;
+  background: linear-gradient(180deg, #f7faff 0%, #f1f6ff 100%);
+  position: relative;
+  border-radius: 4px 0 0 4px;
+  overflow: hidden;
+  transition: all 0.5s ease-in;
+}
+.filter-container .right {
+  flex: 1;
+}
+.filter-container .right .item {
+  padding: 30px 36px;
+  display: flex;
+  align-items: center;
+  line-height: 18px;
+}
+.filter-container .menus-content {
+  width: 100%;
+  position: relative;
+  margin-left: -202px;
+  padding-bottom: 26px;
+}
+.filter-container .menus-content .rows {
+  display: flex;
+  padding: 20px 0px;
+}
+.filter-container .menus-content .sup-menu {
+  width: 202px;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-family: MicrosoftYaHei;
+  color: #333333;
+  line-height: 18px;
+  padding: 0 36px;
+  align-items: flex-start;
+}
+.filter-container .menus-content .sup-menu .icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-right: 8px;
+}
+.filter-container .menus-content .sup-menu .sup-menu-item {
+  display: flex;
+  align-items: center;
+}
+.filter-container .menus-content .child-menu {
+  flex: 1;
+  display: flex;
+  margin-left: 32px;
+  align-content: space-between;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.filter-container .menus-content .all-child-menu {
+  width: 76px;
+}
+.filter-container .menus-content .other-child-menu {
+  flex: 1;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: wrap;
+  align-content: space-between;
+}
+.filter-container .menus-content .child-menu-item {
+  width: 126px;
+  margin: 3px 0 26px 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: MicrosoftYaHei;
+  color: #666666;
+  line-height: 14px;
+}
+.filter-container .menus-content .show-more {
+  display: flex;
+  align-item: center;
+  cursor: pointer;
+  position: absolute;
+  bottom: 15px;
+  right: calc(50% - 126px);
+  font-size: 14px;
+  font-family: MicrosoftYaHei;
+  color: #333333;
+  line-height: 16px;
+}
+.filter-container .menus-content .show-more span {
+  line-height: 18px;
+}
+.filter-container .menus-content .show-more .icon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+}
+.filter-container .menus-content .show-more .icon__open {
+  background: url("./assets/open.png") no-repeat;
+  background-size: cover;
+}
+.filter-container .menus-content .show-more .icon__close {
+  background: url("./assets/close.png") no-repeat;
+  background-size: cover;
+}
+.filter-container .active {
+  color: #4974f5 !important;
+}
