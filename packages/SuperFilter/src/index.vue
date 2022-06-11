@@ -13,20 +13,44 @@
           </div>
         </div>
         <div class="child-menu">
-          <div class="all-child-menu" :class="[isActive(item.key, 'all')]" @click="handleActive(item.key, 'all')">
-            全部
+          <div
+            class="all-child-menu"
+            :class="[isActive(item.key, 'all')]"
+            @click="handleActive(item.key, 'all')"
+          >
+            <span>全部</span>
           </div>
           <div class="other-child-menu">
-            <div v-for="(child, childIdx) of item.children" :key="childIdx" class="child-menu-item"
-              :class="[isActive(item.key, child.key)]" @click="handleActive(item.key, child.key)">
+            <span
+              v-for="(child, childIdx) of item.children"
+              :key="childIdx"
+              class="child-menu-item"
+              :class="[isActive(item.key, child.key)]"
+              @click="handleActive(item.key, child.key)"
+            >
               {{ child.name }}
-            </div>
+            </span>
           </div>
         </div>
       </div>
       <div class="show-more" @click="handleShowMore">
         <span>{{ isShowMore ? "收起" : "展示更多" }}</span>
-        <i class="icon" :class="[isShowMore ? 'icon__close' : 'icon__open']"></i>
+        <svg
+          t="1654911256281"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="1229"
+          width="200"
+          height="200"
+        >
+          <path
+            d="M533.333333 776.533333L341.333333 584.533333l29.866667-29.866666 162.133333 162.133333 162.133334-162.133333 29.866666 29.866666-192 192z m0-503.466666l-162.133333 162.133333-29.866667-29.866667L533.333333 213.333333 725.333333 405.333333l-29.866666 29.866667-162.133334-162.133333z"
+            fill="#cdcdcd"
+            p-id="1230"
+          ></path>
+        </svg>
       </div>
     </div>
   </div>
@@ -47,21 +71,24 @@ const props = defineProps({
   },
   selected: {
     type: Object,
-    default: () => { },
+    default: () => {},
   },
   defaultExpand: {
     type: Number,
-    default: 5
-  }
+    default: 5,
+  },
 });
 
 const emits = defineEmits(["onFilter"]);
 
 // 默认参数定义
-const actives = ref([])
-const showFilterData = ref([])
+const actives = ref([]);
+const showFilterData = ref([]);
 
-function isActive(parentValue: string | number, childValue: string | number): string {
+function isActive(
+  parentValue: string | number,
+  childValue: string | number
+): string {
   for (let item of actives.value) {
     if (item.key === parentValue && item.value === childValue) {
       return "active";
@@ -74,9 +101,15 @@ function handleActive(
 ): void {
   for (let item of actives.value) {
     if (item.key === parentValue) {
-      item.value = childValue;
+      if (item.value === childValue) {
+        item.value = "";
+      } else {
+        item.value = childValue;
+      }
     }
   }
+  const filterData = actives.value.filter((item) => item.value !== "");
+  console.log("actives ===>", filterData);
   emits("onFilter", actives);
 }
 
@@ -84,7 +117,7 @@ const isShowMore = ref(false);
 watch(
   () => isShowMore.value,
   (val) => {
-    handleData();
+    handleData({ isSetDefValue: false });
   }
 );
 function handleShowMore(): void {
@@ -100,19 +133,21 @@ watch(
 );
 
 // 处理传入数据
-function handleData(): void {
+function handleData({ isSetDefValue } = { isSetDefValue: true }): void {
   if (!isShowMore.value) {
     showFilterData.value = props.data.slice(0, props.defaultExpand);
   } else {
     showFilterData.value = props.data.slice(0);
   }
-  // 创建默认值
-  actives.value = showFilterData.value.map((item) => {
-    return {
-      key: item.key,
-      value: "all",
-    };
-  });
+  if (isSetDefValue) {
+    // 创建默认值
+    actives.value = showFilterData.value.map((item) => {
+      return {
+        key: item.key,
+        value: "",
+      };
+    });
+  }
 }
 
 // 选中处理
@@ -120,7 +155,7 @@ watch(
   () => props.selected,
   (val) => {
     if (JSON.stringify(val) !== "{}") {
-      const { parent, child } = val
+      const { parent, child } = val;
       handleSelected({ parent, child });
     }
   },
@@ -137,5 +172,5 @@ function handleSelected(params: SELECT_CODE): void {
 </script>
 
 <style lang="scss" scoped>
-@import './assets/index.scss';
+@import "./assets/index.scss";
 </style>
