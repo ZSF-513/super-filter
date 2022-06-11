@@ -69,9 +69,9 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  selected: {
-    type: Object,
-    default: () => {},
+  selectAll: {
+    type: Boolean,
+    default: true,
   },
   defaultExpand: {
     type: Number,
@@ -82,19 +82,22 @@ const props = defineProps({
 const emits = defineEmits(["onFilter"]);
 
 // 默认参数定义
-const actives = ref([]);
-const showFilterData = ref([]);
+const actives = ref<Record<string, any>[]>([]);
+const showFilterData = ref<unknown[]>([]);
 
+// 激活状态
 function isActive(
   parentValue: string | number,
   childValue: string | number
-): string {
+): string | undefined {
+  if (!actives.value.length) return "";
   for (let item of actives.value) {
     if (item.key === parentValue && item.value === childValue) {
       return "active";
     }
   }
 }
+// 处理选中
 function handleActive(
   parentValue: string | number,
   childValue: string | number
@@ -109,8 +112,7 @@ function handleActive(
     }
   }
   const filterData = actives.value.filter((item) => item.value !== "");
-  console.log("actives ===>", filterData);
-  emits("onFilter", actives);
+  emits("onFilter", filterData);
 }
 
 const isShowMore = ref(false);
@@ -133,41 +135,41 @@ watch(
 );
 
 // 处理传入数据
-function handleData({ isSetDefValue } = { isSetDefValue: true }): void {
+function handleData(params = { isSetDefValue: true }): void {
   if (!isShowMore.value) {
     showFilterData.value = props.data.slice(0, props.defaultExpand);
   } else {
     showFilterData.value = props.data.slice(0);
   }
-  if (isSetDefValue) {
-    // 创建默认值
-    actives.value = showFilterData.value.map((item) => {
+
+  const defaultSelect = (defValue = false) => {
+    const data = showFilterData.value.map((item) => {
       return {
         key: item.key,
-        value: "",
+        value: defValue ? openSelect(item) || "all" : "",
       };
     });
-  }
-}
-
-// 选中处理
-watch(
-  () => props.selected,
-  (val) => {
-    if (JSON.stringify(val) !== "{}") {
-      const { parent, child } = val;
-      handleSelected({ parent, child });
+    console.log("data", data);
+    return data;
+  };
+  const openSelect = (params) => {
+    if (!actives.value.length) return "all";
+    for (let active of actives.value) {
+      if (active.key === params.key) {
+        return active.value;
+      }
     }
-  },
-  {
-    immediate: true,
-  }
-);
+  };
 
-function handleSelected(params: SELECT_CODE): void {
-  const { parent, child } = params;
-  isActive(parent, child);
-  handleActive(parent, child);
+  // 创建默认值
+  if (props.selectAll) {
+    //默认值为all
+    console.log("actives======>", actives.value);
+    actives.value = defaultSelect(true);
+  } else if (params.isSetDefValue) {
+    // 默认值为空
+    actives.value = defaultSelect();
+  }
 }
 </script>
 
