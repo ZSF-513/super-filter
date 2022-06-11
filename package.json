@@ -1,7 +1,7 @@
 {
   "name": "@zhangyun7031/super-filter",
   "private": false,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "lib/super-filter.esm.js",
   "module": "lib/super-filter.esm.js",
   "types": "lib/src/main.d.ts",

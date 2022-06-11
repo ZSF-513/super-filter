@@ -149,7 +149,6 @@ function handleData(params = { isSetDefValue: true }): void {
         value: defValue ? openSelect(item) || "all" : "",
       };
     });
-    console.log("data", data);
     return data;
   };
   const openSelect = (params) => {
